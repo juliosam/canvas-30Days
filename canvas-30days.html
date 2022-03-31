@@ -7,6 +7,50 @@
 <body>
 <canvas id="draw" width="800" height="800"></canvas>
 <script>
+
+  let canvas = document.querySelector("#draw");
+  const context = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  context.strokeStyle = 'green';
+  context.lineJoin = 'round';
+  context.lineCap = 'round';
+  context.lineWidth = 20;
+  context.globalCompositeOperation = 'multiply';
+
+  let dibujando = false;
+  let ultimoX = 0;
+  let ultimoY = 0;
+  let hue = 0;
+  let direction = true;
+
+  function dibujar(e) {
+    if (!dibujando)return;
+    console.log(e);
+    context.strokeStyle = `hsl(${hue}, 100% , 50%)`;
+    context.beginPath();
+    context.moveTo(ultimoX, ultimoY);
+    context.lineTo(e.offsetX, e.offsetY);
+    context.stroke();
+
+    [ultimoX, ultimoY] = [e.offsetX, e.offsetY];
+    hue++;
+    if(context.lineWidth >= 50 || context.lineWidth <= 1){direction = !direction};
+    if(direction){context.lineWidth ++}
+    else{context.lineWidth--}
+
+  }
+
+  canvas.addEventListener('mousemove', dibujar);
+  canvas.addEventListener('mouseup', () => dibujando = false);
+  canvas.addEventListener('mouseout', () => dibujando = false);
+  canvas.addEventListener('mousedown', (e) => {
+    [ultimoX, ultimoY] = [e.offsetX, e.offsetY];
+    dibujando = true});
+
+  console.log(context)
+
+
 </script>
 
 <style>
